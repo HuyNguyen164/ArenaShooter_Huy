@@ -31,15 +31,36 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+	// Collision Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = SphereCollision)
 	USphereComponent* SphereCollision;
 	
+	// Static Mesh Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = StaticMesh)
 	UStaticMeshComponent* StaticMesh;
 	
+	// Projectile Movement Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = StaticMesh)
 	UProjectileMovementComponent* ProjectileMovement;
 
+	// Material for hit effect
+	UPROPERTY(EditDefaultsOnly, Category = "Hit Effect")
+	UMaterialInterface* HitMaterial;
+	
+	// Save original materials to restore after hit effect
+	TMap<TWeakObjectPtr<UPrimitiveComponent>, TArray<UMaterialInterface*>> OriginalMaterials;
+	
+	// Restore original materials after hit effect duration
+	UFUNCTION()
+	void RestoreMaterials(UPrimitiveComponent* TargetComponent);
+	
+private:
+	bool bHasHit = false;
+	//
+	// FTimerHandle DestroyTimerHandle;
+	//
+	// void DestroyProjectile();
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
