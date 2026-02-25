@@ -41,4 +41,6 @@ private:
 	
 	UPROPERTY()
 	UMaterialParameterCollectionInstance* MPC_Instance;
+	
+	float CurrentEmissive = 0.f;
 };

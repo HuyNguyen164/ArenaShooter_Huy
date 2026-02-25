@@ -38,37 +38,41 @@ void UNhayDeBatDen::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	
 	if (!OwnerCharacter || !MPC_Instance) return;
 
-	if (!OwnerCharacter->GetCharacterMovement()->IsFalling())
+	float TargetEmissive = 0.f;
+
+	if (OwnerCharacter->GetCharacterMovement()->IsFalling())
 	{
-		MPC_Instance->SetScalarParameterValue(FName("Emissive"), 0.f);
-		return;
+		FVector Start = OwnerCharacter->GetActorLocation();
+		FVector End = Start - FVector(0, 0, 1000.f);
+
+		FHitResult Hit;
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(OwnerCharacter);
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(
+			Hit,
+			Start,
+			End,
+			ECC_Visibility,
+			Params
+		);
+
+		if (bHit)
+		{
+			float Distance = Start.Z - Hit.Location.Z;
+			float Alpha = FMath::Clamp(Distance / MaxJumpHeight, 0.f, 1.f);
+			TargetEmissive = Alpha * MaxEmissive;
+		}
 	}
 
-	FVector Start = OwnerCharacter->GetActorLocation();
-	FVector End = Start - FVector(0, 0, 1000.f);
-
-	FHitResult Hit;
-
-	FCollisionQueryParams Params;
-	Params.AddIgnoredActor(OwnerCharacter);
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		Hit,
-		Start,
-		End,
-		ECC_Visibility,
-		Params
+	// Interp
+	CurrentEmissive = FMath::FInterpTo(
+		CurrentEmissive,
+		TargetEmissive,
+		DeltaTime,
+		8.f
 	);
 
-	if (bHit)
-	{
-		float Distance = Start.Z - Hit.Location.Z;
-
-		float Alpha = FMath::Clamp(Distance / MaxJumpHeight, 0.f, 1.f);
-
-		float EmissiveValue = Alpha * MaxEmissive;
-
-		MPC_Instance->SetScalarParameterValue(FName("Emissive"), EmissiveValue);
-	}
+	MPC_Instance->SetScalarParameterValue(FName("Emissive"), CurrentEmissive);
 }
 
