@@ -47,35 +47,9 @@ void ALoaiDanCuaHuy::BeginPlay()
 	
 }
 
-// void ALoaiDanCuaHuy::OnProjectileHit(
-// 	UPrimitiveComponent* HitComponent,
-// 	AActor* OtherActor,
-// 	UPrimitiveComponent* OtherComp,
-// 	FVector NormalImpulse,
-// 	const FHitResult& Hit)
-// {
-// 	ACharacter* HitCharacter = Cast<ACharacter>(OtherActor);
-// 	if (HitCharacter)
-// 	{
-// 		UE_LOG(LogTemp, Warning, TEXT("Hit character: %s"), *HitCharacter->GetName());
-// 		USkeletalMeshComponent* MeshComponent = HitCharacter->GetMesh();
-// 		if (MeshComponent)
-// 		{
-// 			UE_LOG(LogTemp, Warning, TEXT("Hit character mesh: %s"), *MeshComponent->GetName());
-// 			UMaterialInterface* Material = MeshComponent->GetMaterial(0);
-// 			if (Material)
-// 			{
-// 				UE_LOG(LogTemp, Warning, TEXT("Material: %s"), *Material->GetName());
-// 				MeshComponent->CreateAndSetMaterialInstanceDynamic(0)->SetVectorParameterValue(
-// 					FName("Paint Tint"), FLinearColor::Green);
-// 			}
-// 		}
-// 	}
-// }
-
 void ALoaiDanCuaHuy::OnProjectileHit(
 	UPrimitiveComponent* HitComponent,
-	AActor* OtherActor,
+	AActor* OtherActor, 
 	UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse,
 	const FHitResult& Hit)
